@@ -54,8 +54,10 @@ void QPainterWidget::interrupt(int32_t* data)
 
 //    qDebug() << data[1] << data[3];
 
-    buf[0][pnt] = data[3];
-    buf[1][pnt] = data[4];
+    buf[0][pnt] = data[0];
+    buf[1][pnt] = data[1];
+//    buf[2][pnt] = data[2];
+//    buf[3][pnt] = data[3];
     pnt++; pnt %= rail;
 
     time++;

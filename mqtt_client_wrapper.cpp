@@ -4,7 +4,9 @@
 
 MqttClient::MqttClient()
 {
+    QString vis_topic = "inc/vis";
     m_client_ = new QMqttClient(this);
+    DeviceWidget * dev_wid_ = new DeviceWidget();
     connect(m_client_, &QMqttClient::messageReceived, this, [=](const QByteArray &message, const QMqttTopicName &topic)
     {
         const QString content = QLatin1String(" Received Topic: ")
@@ -14,6 +16,18 @@ MqttClient::MqttClient()
                     + QLatin1Char('\n');
         qDebug() << content;
         emit MessageRecieved(message, topic);
+        if (topic.name() == vis_topic)
+        {
+            int32_t len = message.length();
+            int32_t buf[64];
+            memset(buf, 0, 64);
+
+            for (int32_t i =0;i < 8; i++)
+            {
+                buf[i] = (message[3*i]) | ( message[3*i+1] << 8) | ( message[3*i+1] << 16);
+            }
+            emit VisRecieved(reinterpret_cast<int32_t *>(buf));
+        }
     });
     connect(m_client_, &QMqttClient::pingResponseReceived, this, [=]()
     {
@@ -24,6 +38,11 @@ MqttClient::MqttClient()
     {
         emit Disconnected();
     });
+
+
+    dev_wid_->show();
+    QObject::connect(this, &MqttClient::VisRecieved, dev_wid_->qPainterWidget , &QPainterWidget::interrupt);
+
 
     m_client_->setHostname(hostname_);
     m_client_->setPort(port_);

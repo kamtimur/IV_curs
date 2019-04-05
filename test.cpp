@@ -25,21 +25,6 @@ Test::Test()
         sender->Publish(vis_topic, arr);
     });
 
-
-    QObject::connect(reciever, &MqttClient::MessageRecieved, this, [=](const QByteArray &message, const QMqttTopicName &topic)
-    {
-        int32_t buf[gen->signal_buf_size_];
-        memset(buf, 0, gen->signal_buf_size_);
-
-        for (int32_t i =0;i < 8; i++)
-        {
-            buf[i] = (message[3*i]) | ( message[3*i+1] << 8) | ( message[3*i+1] << 16);
-        }
-        if(topic.name() == vis_topic)
-        {
-            emit VisRecieved(reinterpret_cast<int32_t *>(buf));
-        }
-    });
     sender->Connect();
     reciever->Connect();
 

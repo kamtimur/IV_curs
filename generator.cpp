@@ -25,9 +25,10 @@ void Generator::timerEvent(QTimerEvent * )
       for ( int32_t i = 0; i < 8; i++ )
       {
           int32_t tmp = (sin(2.*3.14*counter_/500.+ 3.14/3.*i)+1)*50;
-          signal_buf_[i*3]= tmp;
-          signal_buf_[i*3+1]= tmp>>8;
-          signal_buf_[i*3+2]= tmp>>16;
+          signal_buf_[i*3]   = tmp;
+          signal_buf_[i*3+1] = tmp >> 8;
+          signal_buf_[i*3+2] = tmp >> 16;
+          signal_buf_[i*3+2] = tmp >> 24;
       }
       signal_buf_mutex_.unlock();
       emit SignalGenerated();
