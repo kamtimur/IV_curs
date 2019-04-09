@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <cstring>
+#include <QDebug>
 Generator::Generator(int32_t period, QObject *parent) : QObject(parent)
 {
     startTimer(period);
@@ -20,18 +21,18 @@ void Generator::GetSignalBuf(uint8_t *outer_buf)
 
 void Generator::timerEvent(QTimerEvent * )
 {
-      signal_buf_mutex_.lock();
-      memset(signal_buf_,0,signal_buf_size_);
-      for ( int32_t i = 0; i < 8; i++ )
-      {
-          int32_t tmp = (sin(2.*3.14*counter_/500.+ 3.14/3.*i)+1)*50;
-          signal_buf_[i*3]   = tmp;
-          signal_buf_[i*3+1] = tmp >> 8;
-          signal_buf_[i*3+2] = tmp >> 16;
-          signal_buf_[i*3+2] = tmp >> 24;
-      }
-      signal_buf_mutex_.unlock();
-      emit SignalGenerated();
-      counter_++;
+    signal_buf_mutex_.lock();
+    memset(signal_buf_,0,signal_buf_size_);
+    for ( int32_t i = 0; i < channel_num_; i++ )
+    {
+      int32_t tmp = static_cast<int32_t>((sin(2.*3.14*counter_/500.+ 3.14/3.)+1)*10);
+      signal_buf_[i*4]   = static_cast<uint8_t>(tmp);
+      signal_buf_[i*4+1] = static_cast<uint8_t>(tmp >> 8);
+      signal_buf_[i*4+2] = static_cast<uint8_t>(tmp >> 16);
+      signal_buf_[i*4+3] = static_cast<uint8_t>(tmp >> 24);
+    }
+    signal_buf_mutex_.unlock();
+    emit SignalGenerated();
+    counter_++;
 
 }

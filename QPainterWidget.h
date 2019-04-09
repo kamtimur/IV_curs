@@ -57,9 +57,9 @@ private:
 
 
 protected:
-    static const int chM    = 2;
+    static const int chM    = 8;
     static const int rail   = 2000;
-    int buf[chM][rail];
+    int32_t buf[chM][rail];
     int pnt;
     int time;
 

@@ -5,7 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
-
+QT += mqtt
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = mqtt_client_qt
@@ -26,20 +26,18 @@ CONFIG += c++17
 
 SOURCES += \
         main.cpp \
-        widget.cpp \
     generator.cpp \
     mqtt_client_wrapper.cpp \
-    DeviceWidget_V0.cpp \
     QPainterWidget.cpp \
-    test.cpp
+    test.cpp \
+    device_widget.cpp
 
 HEADERS += \
-        widget.h \
     generator.h \
     mqtt_client_wrapper.h \
-    DeviceWidget_V0.h \
     QPainterWidget.h \
-    test.h
+    test.h \
+    device_widget.h
 
 
 FORMS += \
@@ -49,12 +47,3 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
-
-
-
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/build-qtmqtt-Desktop_Qt_5_12_0_MinGW_64_bit-Debug/lib/ -lQt5Mqtt
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/build-qtmqtt-Desktop_Qt_5_12_0_MinGW_64_bit-Debug/lib/ -lQt5Mqttd
-else:unix: LIBS += -L$$PWD/build-qtmqtt-Desktop_Qt_5_12_0_MinGW_64_bit-Debug/lib/ -lQt5Mqtt
-
-INCLUDEPATH += $$PWD/build-qtmqtt-Desktop_Qt_5_12_0_MinGW_64_bit-Debug/include
-DEPENDPATH += $$PWD/build-qtmqtt-Desktop_Qt_5_12_0_MinGW_64_bit-Debug/include
