@@ -1,4 +1,4 @@
-#include "generator.h"
+#include "Generator.h"
 
 #include <cmath>
 #include <cstring>

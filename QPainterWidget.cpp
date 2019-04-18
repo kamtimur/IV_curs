@@ -10,14 +10,6 @@ QPainterWidget::QPainterWidget(QWidget *parent) : QWidget(parent)
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     this->setMinimumSize(0,0);
 
-    //this->setFrameStyle(54); //(QFrame::Box | QFrame::Sunken);
-    //this->setLineWidth(1);
-
-    //QPixmap* pixmap = new QPixmap( 200, 200 );
-    //pixmap->fill( Qt::white );
-    //QPainter painter( pixmap );
-    //painter->setRenderHint( QPainter::Antialiasing );
-
     shape = Polygon;
     antialiased = false;
     transformed = false;
@@ -35,24 +27,10 @@ QPainterWidget::QPainterWidget(QWidget *parent) : QWidget(parent)
     }
     pnt = 0;
     time = 0;
-
-//    fr = false;
-//    rcnt = 0;
-
-//    timer   = new QTimer();
-//    timer->start(100);
-//    connect(timer,SIGNAL(timeout()), this,SLOT(interrupt()) );
 }
 
 void QPainterWidget::interrupt(int32_t* data)
 {
-    //qDebug() << rcnt;
-//    rcnt = 0;
-
-    //double  z = sin( double(time)/100.0 * 2.0 * M_PI ) * 100.0;
-    //int     r = int(z);
-
-//    qDebug() << data[1] << data[3];
 
     buf[0][pnt] = data[0];
     buf[1][pnt] = data[1];
@@ -70,9 +48,6 @@ void QPainterWidget::interrupt(int32_t* data)
 
 void QPainterWidget::timerEvent(QTimerEvent*)
 {
-//    fr = true;
-
-//    rcnt++;
     update();
 }
 
@@ -90,25 +65,21 @@ QSize QPainterWidget::minimumSizeHint() const
 void QPainterWidget::setShape(Shape shape)
 {
     this->shape = shape;
-//    update();
 }
 
 void QPainterWidget::setPen(const QPen &pen)
 {
     this->pen = pen;
-//    update();
 }
 
 void QPainterWidget::setBrush(const QBrush &brush)
 {
     this->brush = brush;
-//    update();
 }
 
 void QPainterWidget::setAntialiased(bool antialiased)
 {
     this->antialiased = antialiased;
-//    update();
 }
 
 void QPainterWidget::setTransformed(bool transformed)

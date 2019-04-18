@@ -1,5 +1,4 @@
-#ifndef DEVICEWIDGET_V0_H
-#define DEVICEWIDGET_V0_H
+#pragma once
 
 #include <QWidget>
 
@@ -15,7 +14,11 @@ class DeviceWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit DeviceWidget(QWidget *parent = nullptr);
+    explicit DeviceWidget(QString label, QWidget *parent = nullptr);
+signals:
+    void signalConnect();
+    void signalStartPublish();
+    void signalSubscribe();
 public slots:
     void SetErrCount(const QString & err);
     void SetSpeed(const QString & speed);
@@ -31,4 +34,3 @@ protected:
     bool    flg_state;
 };
 
-#endif // DEVICEWIDGET_V0_H
