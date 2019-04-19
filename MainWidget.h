@@ -22,5 +22,7 @@ private:
     Generator* generator_;
     DeviceWidget* dev_wid_sender_;
     DeviceWidget* dev_wid_reciever_;
+    bool sender_publish_ = false;
+    QString vis_topic_ = "inc/vis";
 };
 
