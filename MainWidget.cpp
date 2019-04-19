@@ -1,6 +1,7 @@
 #include "MainWidget.h"
-#include <QLayout>
 
+#include <QLayout>
+#include <QInputDialog>
 
 MainWidget::MainWidget(QWidget *parent) : QWidget(parent)
 {
@@ -16,7 +17,9 @@ MainWidget::MainWidget(QWidget *parent) : QWidget(parent)
 
     connect(dev_wid_reciever_, &DeviceWidget::signalSubscribe, this, [=]()
     {
-        reciever_->slotSubscribe(vis_topic_, 1);
+        bool ok;
+        QString write_text = QInputDialog::getText(this, "Input topic", "Data:", QLineEdit::Normal, "", &ok);
+        reciever_->slotSubscribe(write_text, 1);
     });
 
 
@@ -38,7 +41,14 @@ MainWidget::MainWidget(QWidget *parent) : QWidget(parent)
     connect(reciever_, &MqttClientWrapper::signalVisRecieved, dev_wid_reciever_, &DeviceWidget::PaintData);
     connect(reciever_, &MqttClientWrapper::signalError, dev_wid_reciever_, &DeviceWidget::SetErrCount);
     connect(reciever_, &MqttClientWrapper::signalSpeed, dev_wid_reciever_, &DeviceWidget::SetSpeed);
-
+    connect(reciever_, &MqttClientWrapper::signalMessageRecieved, this, [=](const QByteArray &message, const QMqttTopicName &topic)
+    {
+        if(topic.name() == "$SYS")
+        {
+            qDebug() << "topic" << topic;
+            qDebug() << "message" << message;
+        }
+    });
 
     QVBoxLayout* vLayout = new QVBoxLayout;
 

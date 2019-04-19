@@ -45,6 +45,11 @@ void MqttClientWrapper::slotSubscribe(const QMqttTopicFilter &topic, quint8 qos)
         qDebug() << "Could not subscribe. Is there a valid connection?";
         return;
     }
+    else
+    {
+        qDebug() << "Subscribed to topic " << topic << " success";
+        return;
+    }
 }
 
 void MqttClientWrapper::slotMessageRecieved(const QByteArray &message, const QMqttTopicName &topic)
