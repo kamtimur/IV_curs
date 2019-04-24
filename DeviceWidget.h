@@ -22,12 +22,14 @@ signals:
 public slots:
     void SetErrCount(const QString & err);
     void SetSpeed(const QString & speed);
+    void SetStatus(int32_t status);
     void PaintData(int32_t* data);
 protected:
 
     QPainterWidget * qPainterWidget;
     QLabel * speed_;
     QLabel * err_count_;
+    QLabel * status_;
     QPushButton*    btn_connect_;
     QPushButton*    btn_clear_;
 
