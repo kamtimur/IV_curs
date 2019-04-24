@@ -39,7 +39,7 @@ protected:
 private:
     QString vis_topic_ = "inc/vis";
     QMqttClient * m_client_ = nullptr;
-    QString hostname_ = "localhost";
+    QString hostname_ = "192.168.4.218";
     uint16_t port_ = 1883;
     int32_t speed_ = 0;
     int32_t total_rec_bits_ = 0;

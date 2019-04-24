@@ -17,9 +17,10 @@ MainWidget::MainWidget(QWidget *parent) : QWidget(parent)
 
     connect(dev_wid_reciever_, &DeviceWidget::signalSubscribe, this, [=]()
     {
-        bool ok;
-        QString write_text = QInputDialog::getText(this, "Input topic", "Data:", QLineEdit::Normal, "", &ok);
-        reciever_->slotSubscribe(write_text, 1);
+//        bool ok;
+//        QString write_text = QInputDialog::getText(this, "Input topic", "Data:", QLineEdit::Normal, "", &ok);
+
+        reciever_->slotSubscribe(vis_topic_, 1);
     });
 
 
@@ -49,7 +50,14 @@ MainWidget::MainWidget(QWidget *parent) : QWidget(parent)
             qDebug() << "message" << message;
         }
     });
-
+    connect(reciever_, &MqttClientWrapper::signalConnectionEstablished, this, [=]()
+    {
+        qDebug() << "reciever connected";
+    });
+    connect(sender_, &MqttClientWrapper::signalConnectionEstablished, this, [=]()
+    {
+        qDebug() << "sender connected";
+    });
     QVBoxLayout* vLayout = new QVBoxLayout;
 
     vLayout->addWidget(dev_wid_sender_);
@@ -66,12 +74,11 @@ void MainWidget::GetSignal()
 {
     if(sender_publish_ == true)
     {
-        int32_t count = 0;
+
         int32_t buf[Generator::channel_num_ + 2];
         generator_->GetSignalBuf(reinterpret_cast<uint8_t*>(buf));
-        buf[Generator::channel_num_] = count;
         QByteArray message = QByteArray::fromRawData( reinterpret_cast<const char*>(buf), Generator::signal_buf_size_ + 4 );
+//        if(count % 2 == 0)
         sender_->slotPublish(vis_topic_, message, 0, false);
-        count++;
     }
 }

@@ -31,6 +31,10 @@ void Generator::timerEvent(QTimerEvent * )
       signal_buf_[i*4+2] = static_cast<uint8_t>(tmp >> 16);
       signal_buf_[i*4+3] = static_cast<uint8_t>(tmp >> 24);
     }
+    signal_buf_[channel_num_*4]   = static_cast<uint8_t>(counter_);
+    signal_buf_[channel_num_*4+1] = static_cast<uint8_t>(counter_ >> 8);
+    signal_buf_[channel_num_*4+2] = static_cast<uint8_t>(counter_ >> 16);
+    signal_buf_[channel_num_*4+3] = static_cast<uint8_t>(counter_ >> 24);
     signal_buf_mutex_.unlock();
     emit SignalGenerated();
     counter_++;
