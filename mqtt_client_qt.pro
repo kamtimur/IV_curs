@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui mqtt
+QT       += core gui mqtt websockets
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = mqtt_client_qt
@@ -29,14 +29,16 @@ SOURCES += \
     MainWidget.cpp \
     MqttClientWrapper.cpp \
     Generator.cpp \
-    DeviceWidget.cpp
+    DeviceWidget.cpp \
+    WebSocketIODevice.cpp
 
 HEADERS += \
     QPainterWidget.h \
     MainWidget.h \
     MqttClientWrapper.h \
     Generator.h \
-    DeviceWidget.h
+    DeviceWidget.h \
+    WebSocketIODevice.h
 
 
 # Default rules for deployment.

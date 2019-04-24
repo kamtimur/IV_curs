@@ -11,24 +11,33 @@ MqttClientWrapper::MqttClientWrapper()
     connect(m_client_, &QMqttClient::stateChanged, this, &MqttClientWrapper::slotStateChanged);
     connect(m_client_, &QMqttClient::disconnected, this, &MqttClientWrapper::slotDisconnected);
 
-    m_client_->setHostname(hostname_);
-    m_client_->setPort(port_);
 }
 
-void MqttClientWrapper::slotConnect()
+void MqttClientWrapper::slotConnect(ProtocolType protocol_type)
 {
-    if (m_client_->state() == QMqttClient::Disconnected)
+    qDebug() << "state" << m_client_->state();
+    if (protocol_type == ProtocolType::MQTT)
     {
-        qDebug() << "Connect";
+        m_client_->setHostname(hostname_);
+        m_client_->setPort(port_);
         m_client_->connectToHost();
+    }
+    if (protocol_type == ProtocolType::WEB_SOCKET)
+    {
+        m_device_.setUrl(url_);
+        m_device_.setProtocol("mqtt");
+        connect(&m_device_, &WebSocketIODevice::socketConnected, this, [=]()
+        {
+            qDebug() << "WebSocket connected, initializing MQTT connection.";
+            m_client_->setTransport(&m_device_, QMqttClient::TransportType::IODevice);
+            m_client_->connectToHost();
+        });
+        if (!m_device_.open(QIODevice::ReadWrite))
+        {
+            qDebug() << "Could not open socket device";
+        }
         time_.start();
         kdr_count_ = 0;
-    }
-    else
-    {
-        qDebug() << "Disconnect";
-        m_client_->disconnectFromHost();
-        total_rec_bits_ = 0;
     }
 }
 
@@ -81,6 +90,7 @@ void MqttClientWrapper::slotMessageRecieved(const QByteArray &message, const QMq
 
 void MqttClientWrapper::slotDisconnected()
 {
+    total_rec_bits_ = 0;
     emit signalDisconnected();
 }
 

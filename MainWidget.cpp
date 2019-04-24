@@ -12,8 +12,14 @@ MainWidget::MainWidget(QWidget *parent) : QWidget(parent)
     dev_wid_sender_ = new DeviceWidget("sender");
     dev_wid_reciever_ = new DeviceWidget("reciever");
 
-    connect(dev_wid_sender_, &DeviceWidget::signalConnect, sender_, &MqttClientWrapper::slotConnect);
-    connect(dev_wid_reciever_, &DeviceWidget::signalConnect, reciever_, &MqttClientWrapper::slotConnect);
+    connect(dev_wid_sender_, &DeviceWidget::signalConnect, this, [=]()
+    {
+        sender_->slotConnect((MqttClientWrapper::ProtocolType::WEB_SOCKET));
+    });
+    connect(dev_wid_reciever_, &DeviceWidget::signalConnect, this, [=]()
+    {
+        reciever_->slotConnect((MqttClientWrapper::ProtocolType::WEB_SOCKET));
+    });
 
     connect(dev_wid_reciever_, &DeviceWidget::signalSubscribe, this, [=]()
     {
@@ -46,7 +52,7 @@ MainWidget::MainWidget(QWidget *parent) : QWidget(parent)
     {
         if(topic.name() == "$SYS")
         {
-            qDebug() << "topic" << topic;
+            qDebug() << "SYS topic" << topic;
             qDebug() << "message" << message;
         }
     });
