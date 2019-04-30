@@ -15,7 +15,7 @@ public:
     enum class ProtocolType
     {
         MQTT = 0,
-        WEB_SOCKET = 1
+        WEBSOCKETS = 1
     };
 signals:
     void signalConnectionEstablished();
@@ -48,11 +48,12 @@ protected:
 
 private:
      void timerEvent(QTimerEvent *event) override;
+
     WebSocketIODevice m_device_;
     QString vis_topic_ = "inc/vis";
     QMqttClient * m_client_ = nullptr;
-    QString hostname_ = "localhost";
-    QString url_ = "ws://192.168.4.175:1883";
+    QString hostname_ = "192.168.4.161";
+    QString url_ = "ws://192.168.4.161:1883";
     uint16_t port_ = 1883;
     volatile int32_t speed_ = 0;
     int32_t kdr_count_ = 0;

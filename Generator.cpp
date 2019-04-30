@@ -5,7 +5,7 @@
 #include <QDebug>
 Generator::Generator(int32_t period, QObject *parent) : QObject(parent)
 {
-    startTimer(period);
+    startTimer(period, Qt::TimerType::PreciseTimer );
     memset(signal_buf_,0,signal_buf_size_);
 }
 

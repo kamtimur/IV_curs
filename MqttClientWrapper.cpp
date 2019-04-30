@@ -25,7 +25,7 @@ void MqttClientWrapper::slotConnect(ProtocolType protocol_type, bool clean_sessi
             m_client_->setPort(port_);
             m_client_->connectToHost();
         }
-        if (protocol_type == ProtocolType::WEB_SOCKET)
+        if (protocol_type == ProtocolType::WEBSOCKETS)
         {
             m_device_.setUrl(url_);
             m_device_.setProtocol("mqtt");
@@ -52,7 +52,7 @@ void MqttClientWrapper::slotDisconnect(ProtocolType protocol_type)
         {
             m_client_->disconnectFromHost();
         }
-        if (protocol_type == ProtocolType::WEB_SOCKET)
+        if (protocol_type == ProtocolType::WEBSOCKETS)
         {
             m_device_.close();
         }

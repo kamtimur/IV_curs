@@ -17,12 +17,17 @@ public slots:
 protected:
 
 private:
+
+    void timerEvent(QTimerEvent *event) override;
+
+
     MqttClientWrapper* sender_;
     MqttClientWrapper* reciever_;
     Generator* generator_;
     DeviceWidget* dev_wid_sender_;
     DeviceWidget* dev_wid_reciever_;
-    bool sender_publish_ = false;
+    bool is_sender_publish_ = false;
+    volatile int32_t publish_speed_ = 0;
     QString vis_topic_ = "inc/vis";
 };
 
