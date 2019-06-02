@@ -5,9 +5,10 @@
 
 MainWidget::MainWidget(QWidget *parent) : QWidget(parent)
 {
-    sender_ = new MqttClientWrapper();
-    reciever_ = new MqttClientWrapper();
-    generator_ = new Generator(1);
+    sender_ = new MqttClientWrapper("C:/Users/t440s/Documents/qt_mqtt_client/sender");
+    reciever_ = new MqttClientWrapper("C:/Users/t440s/Documents/qt_mqtt_client/reciever");
+    int period = 1;
+    generator_ = new Generator(period);
 
     dev_wid_sender_ = new DeviceWidget("sender");
     dev_wid_reciever_ = new DeviceWidget("reciever");

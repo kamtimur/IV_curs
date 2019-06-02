@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui mqtt websockets
+QT       += core gui websockets
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = mqtt_client_qt
@@ -45,3 +45,10 @@ HEADERS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../build-qtmqtt-Desktop_Qt_5_12_3_MinGW_64_bit-Debug/lib/ -lQt5Mqtt
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../build-qtmqtt-Desktop_Qt_5_12_3_MinGW_64_bit-Debug/lib/ -lQt5Mqttd
+else:unix: LIBS += -L$$PWD/../build-qtmqtt-Desktop_Qt_5_12_3_MinGW_64_bit-Debug/lib/ -lQt5Mqtt
+
+INCLUDEPATH += $$PWD/../build-qtmqtt-Desktop_Qt_5_12_3_MinGW_64_bit-Debug/include
+DEPENDPATH += $$PWD/../build-qtmqtt-Desktop_Qt_5_12_3_MinGW_64_bit-Debug/include

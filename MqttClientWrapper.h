@@ -9,7 +9,7 @@ class MqttClientWrapper : public QObject
 {
     Q_OBJECT
 public:
-    MqttClientWrapper();
+    MqttClientWrapper(QString cert_path);
 
     QMqttClient::ClientState State(){return m_client_->state();}
     enum class ProtocolType
@@ -49,12 +49,17 @@ protected:
 private:
      void timerEvent(QTimerEvent *event) override;
 
-    WebSocketIODevice m_device_;
+    WebSocketIODevice* m_device_;
+    QString cert_path_;
+
     QString vis_topic_ = "inc/vis";
     QMqttClient * m_client_ = nullptr;
-    QString hostname_ = "192.168.4.161";
-    QString url_ = "ws://192.168.4.161:1883";
-    uint16_t port_ = 1883;
+//    QString ip = "192.168.4.49";
+    QString ip_ = "localhost";
+    QString port_ = "8883";
+    QString hostname_ = ip_;
+    QString url_ = "ws://"+ip_+":"+port_;
+
     volatile int32_t speed_ = 0;
     int32_t kdr_count_ = 0;
     int32_t error_count_ = 0;

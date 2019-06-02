@@ -7,7 +7,7 @@ class WebSocketIODevice : public QIODevice
 {
     Q_OBJECT
 public:
-    WebSocketIODevice(QObject *parent = nullptr);
+    WebSocketIODevice(QString path, QObject *parent = nullptr);
 
     bool open(OpenMode mode) override;
     void close() override;
@@ -29,4 +29,5 @@ private:
     QByteArray m_buffer;
     QWebSocket m_socket;
     QUrl m_url;
+    QSslConfiguration ssl_conf;
 };

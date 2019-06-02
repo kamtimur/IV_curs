@@ -2,10 +2,11 @@
 
 
 
-MqttClientWrapper::MqttClientWrapper()
+MqttClientWrapper::MqttClientWrapper(QString cert_path):
+    cert_path_(cert_path)
 {
     m_client_ = new QMqttClient(this);
-
+    m_device_ = new WebSocketIODevice(cert_path_,this);
     connect(m_client_, &QMqttClient::messageReceived, this, &MqttClientWrapper::slotMessageRecieved);
     connect(m_client_, &QMqttClient::pingResponseReceived, this, &MqttClientWrapper::slotPingResieved);
     connect(m_client_, &QMqttClient::stateChanged, this, &MqttClientWrapper::slotStateChanged);
@@ -22,20 +23,21 @@ void MqttClientWrapper::slotConnect(ProtocolType protocol_type, bool clean_sessi
         if (protocol_type == ProtocolType::MQTT)
         {
             m_client_->setHostname(hostname_);
-            m_client_->setPort(port_);
+            m_client_->setPort(port_.toInt());
             m_client_->connectToHost();
         }
         if (protocol_type == ProtocolType::WEBSOCKETS)
         {
-            m_device_.setUrl(url_);
-            m_device_.setProtocol("mqtt");
-            connect(&m_device_, &WebSocketIODevice::socketConnected, this, [=]()
+            m_device_->setUrl(url_);
+            m_device_->setProtocol("mqtt");
+            connect(m_device_, &WebSocketIODevice::socketConnected, this, [=]()
             {
                 qDebug() << "WebSocket connected, initializing MQTT connection.";
-                m_client_->setTransport(&m_device_, QMqttClient::TransportType::IODevice);
-                m_client_->connectToHost();
+                m_client_->setTransport(m_device_, QMqttClient::TransportType::IODevice);
+//                m_client_->connectToHost();
+                m_client_->connectToHostEncrypted("localhost");
             });
-            if (!m_device_.open(QIODevice::ReadWrite))
+            if (!m_device_->open(QIODevice::ReadWrite))
             {
                 qDebug() << "Could not open socket device";
             }
@@ -54,7 +56,7 @@ void MqttClientWrapper::slotDisconnect(ProtocolType protocol_type)
         }
         if (protocol_type == ProtocolType::WEBSOCKETS)
         {
-            m_device_.close();
+            m_device_->close();
         }
     }
 }
